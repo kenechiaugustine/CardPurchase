@@ -113,7 +113,7 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
       >
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={{ paddingBottom: 150 }} 
+          contentContainerStyle={{ paddingBottom: 90 }} 
           keyboardShouldPersistTaps="handled"
         >
           {Object.keys(prices).map((network) => (

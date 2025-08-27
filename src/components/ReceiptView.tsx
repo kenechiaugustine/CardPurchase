@@ -15,6 +15,7 @@ const ReceiptView = forwardRef<View, ReceiptViewProps>(({ session }, ref) => {
 
       <View style={styles.tableHeader}>
         <Text style={[styles.headerText, styles.itemCol]}>Item</Text>
+        <Text style={[styles.headerText, styles.priceCol]}>Price</Text>
         <Text style={[styles.headerText, styles.qtyCol]}>Qty</Text>
         <Text style={[styles.headerText, styles.totalCol]}>Total</Text>
       </View>
@@ -23,6 +24,9 @@ const ReceiptView = forwardRef<View, ReceiptViewProps>(({ session }, ref) => {
         <View key={index} style={styles.tableRow}>
           <Text style={[styles.rowText, styles.itemCol]}>
             {item.network} {item.denomination}
+          </Text>
+          <Text style={[styles.rowText, styles.priceCol]}>
+            ₦{formatNumber(item.price)}
           </Text>
           <Text style={[styles.rowText, styles.qtyCol]}>{item.quantity}</Text>
           <Text style={[styles.rowText, styles.totalCol]}>
@@ -73,6 +77,7 @@ const styles = StyleSheet.create({
   },
   rowText: { fontSize: 16 },
   itemCol: { flex: 3 },
+  priceCol: { flex: 2, textAlign: "left" },
   qtyCol: { flex: 1, textAlign: "center" },
   totalCol: { flex: 2, textAlign: "right" },
   footer: {

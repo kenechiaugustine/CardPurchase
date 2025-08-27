@@ -6,6 +6,8 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { PriceMap } from "../types";
@@ -34,28 +36,37 @@ const PricesScreen: React.FC<Props> = ({ prices, setPrices }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView style={styles.scroll}>
-        {Object.keys(prices).map((network) => (
-          <View key={network} style={styles.section}>
-            <Text style={styles.sectionTitle}>{network}</Text>
-            {Object.keys(prices[network as keyof PriceMap]).map((denom) => (
-              <View key={`${network}-${denom}`} style={styles.row}>
-                <Text style={styles.label}>{denom}</Text>
-                <TextInput
-                  keyboardType="numeric"
-                  value={String(
-                    prices[network as keyof PriceMap][Number(denom)]
-                  )}
-                  onChangeText={(text) =>
-                    handlePriceChange(network, Number(denom), text)
-                  }
-                  style={styles.input}
-                />
-              </View>
-            ))}
-          </View>
-        ))}
-      </ScrollView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={{ paddingBottom: 90 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          {Object.keys(prices).map((network) => (
+            <View key={network} style={styles.section}>
+              <Text style={styles.sectionTitle}>{network}</Text>
+              {Object.keys(prices[network as keyof PriceMap]).map((denom) => (
+                <View key={`${network}-${denom}`} style={styles.row}>
+                  <Text style={styles.label}>{denom}</Text>
+                  <TextInput
+                    keyboardType="numeric"
+                    value={String(
+                      prices[network as keyof PriceMap][Number(denom)]
+                    )}
+                    onChangeText={(text) =>
+                      handlePriceChange(network, Number(denom), text)
+                    }
+                    style={styles.input}
+                  />
+                </View>
+              ))}
+            </View>
+          ))}
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

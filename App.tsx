@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack"; 
+import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import CalculatorScreen from "./src/screens/CalculatorScreen";
 import PricesScreen from "./src/screens/PricesScreen";
@@ -11,12 +11,14 @@ import { PriceMap, Session } from "./src/types";
 import HistoryScreen from "./src/screens/HistoryScreen";
 import ReceiptScreen from "./src/screens/ReceiptScreen";
 import PreviewScreen from "./src/screens/PreviewScreen";
+import CalculatorIcon from "./src/components/icons/CalculatorIcon";
+import PricesIcon from "./src/components/icons/PricesIcon";
 
 export type CalculatorStackParamList = {
   Calculator: { prices: PriceMap };
   History: undefined;
   Receipt: { session: Session };
-  Preview: { session: Session }; 
+  Preview: { session: Session };
 };
 
 const Tab = createBottomTabNavigator();
@@ -60,11 +62,33 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Calculator" options={{ headerShown: false }}>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarActiveTintColor: "#000",
+          tabBarInactiveTintColor: "#999",
+        }}
+      >
+        <Tab.Screen
+          name="CalculatorTab"
+          options={{
+            headerShown: false,
+            title: "Calculator",
+            tabBarIcon: ({ color, size }) => (
+              <CalculatorIcon color={color} size={size} />
+            ),
+          }}
+        >
           {() => <CalculatorStack prices={prices} />}
         </Tab.Screen>
-        <Tab.Screen name="Prices">
+        <Tab.Screen
+          name="PricesTab"
+          options={{
+            title: "Prices",
+            tabBarIcon: ({ color, size }) => (
+              <PricesIcon color={color} size={size} />
+            ),
+          }}
+        >
           {() => <PricesScreen prices={prices} setPrices={setPrices} />}
         </Tab.Screen>
       </Tab.Navigator>
