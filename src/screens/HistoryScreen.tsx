@@ -14,6 +14,8 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Session } from "../types";
 import { CalculatorStackParamList } from "../../App";
 import { formatNumber } from "../utils/helpers";
+import { Swipeable } from "react-native-gesture-handler";
+import ConfirmModal from "../components/ConfirmModal";
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   CalculatorStackParamList,
@@ -23,6 +25,8 @@ type HistoryScreenNavigationProp = StackNavigationProp<
 const HistoryScreen: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [sessionToDelete, setSessionToDelete] = useState<number | null>(null);
   const navigation = useNavigation<HistoryScreenNavigationProp>();
 
   const loadSessions = async () => {
@@ -47,6 +51,45 @@ const HistoryScreen: React.FC = () => {
     }, [])
   );
 
+  const handleConfirmDelete = async () => {
+    if (!sessionToDelete) return;
+
+    try {
+      // Filter out the session to be deleted
+      const updatedSessions = sessions.filter(
+        (session) => session.id !== sessionToDelete
+      );
+
+      // Update AsyncStorage
+      await AsyncStorage.setItem(
+        "sessionsHistory",
+        JSON.stringify(updatedSessions)
+      );
+
+      // Update the local state to re-render the list
+      setSessions(updatedSessions);
+    } catch (error) {
+      console.error("Failed to delete session:", error);
+    } finally {
+      // Close modal and reset the state
+      setDeleteModalVisible(false);
+      setSessionToDelete(null);
+    }
+  };
+
+  const renderRightActions = (sessionId: number) => {
+    const handlePress = () => {
+      setSessionToDelete(sessionId);
+      setDeleteModalVisible(true);
+    };
+
+    return (
+      <TouchableOpacity onPress={handlePress} style={styles.deleteButton}>
+        <Text style={styles.deleteButtonText}>Delete</Text>
+      </TouchableOpacity>
+    );
+  };
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -69,24 +112,34 @@ const HistoryScreen: React.FC = () => {
         data={sessions}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.sessionItem}
-            onPress={() => navigation.navigate("Receipt", { session: item })}
-          >
-            <View>
-              <Text style={styles.sessionDate}>
-                {new Date(item.date).toLocaleString()}
+          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+            <TouchableOpacity
+              style={styles.sessionItem}
+              onPress={() => navigation.navigate("Receipt", { session: item })}
+            >
+              <View>
+                <Text style={styles.sessionDate}>
+                  {new Date(item.date).toLocaleString()}
+                </Text>
+                <Text style={styles.sessionInfo}>
+                  {item.items.length} item(s)
+                </Text>
+              </View>
+              <Text style={styles.sessionTotal}>
+                ₦{formatNumber(item.overallTotal)}
               </Text>
-              <Text style={styles.sessionInfo}>
-                {item.items.length} item(s)
-              </Text>
-            </View>
-            <Text style={styles.sessionTotal}>
-              ₦{formatNumber(item.overallTotal)}
-            </Text>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </Swipeable>
         )}
         contentContainerStyle={styles.listContainer}
+      />
+
+      <ConfirmModal
+        visible={isDeleteModalVisible}
+        title="Confirm Deletion"
+        message="Are you sure you want to permanently delete this session?"
+        onClose={() => setDeleteModalVisible(false)}
+        onConfirm={handleConfirmDelete}
       />
     </SafeAreaView>
   );
@@ -114,6 +167,21 @@ const styles = StyleSheet.create({
   sessionDate: { fontSize: 16, fontWeight: "600" },
   sessionInfo: { fontSize: 14, color: "#555", marginTop: 4 },
   sessionTotal: { fontSize: 18, fontWeight: "700" },
+  deleteButton: {
+    // backgroundColor: "#ff3b30",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 80,
+    borderRadius: 12,
+    marginBottom: 12,
+    height: "100%",
+  },
+  deleteButtonText: {
+    // color: "white",
+    color: "#ff3b30",
+    fontWeight: "600",
+    fontSize: 16,
+  },
 });
 
 export default HistoryScreen;
