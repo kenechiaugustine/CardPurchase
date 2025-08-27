@@ -1,0 +1,7 @@
+import { PriceMap } from "./types";
+
+export const defaultPrices: PriceMap = {
+  GLO: { 100: 980, 200: 1960, 500: 4900, 1000: 9800 },
+  Airtel: { 100: 980, 200: 1960, 500: 4900, 1000: 9800 },
+  MTN: { 100: 980, 200: 1960, 500: 4900, 1000: 9800 },
+};
