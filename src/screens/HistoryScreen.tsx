@@ -55,23 +55,19 @@ const HistoryScreen: React.FC = () => {
     if (!sessionToDelete) return;
 
     try {
-      // Filter out the session to be deleted
       const updatedSessions = sessions.filter(
         (session) => session.id !== sessionToDelete
       );
 
-      // Update AsyncStorage
       await AsyncStorage.setItem(
         "sessionsHistory",
         JSON.stringify(updatedSessions)
       );
 
-      // Update the local state to re-render the list
       setSessions(updatedSessions);
     } catch (error) {
       console.error("Failed to delete session:", error);
     } finally {
-      // Close modal and reset the state
       setDeleteModalVisible(false);
       setSessionToDelete(null);
     }
@@ -168,7 +164,6 @@ const styles = StyleSheet.create({
   sessionInfo: { fontSize: 14, color: "#555", marginTop: 4 },
   sessionTotal: { fontSize: 18, fontWeight: "700" },
   deleteButton: {
-    // backgroundColor: "#ff3b30",
     justifyContent: "center",
     alignItems: "center",
     width: 80,
@@ -177,7 +172,6 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   deleteButtonText: {
-    // color: "white",
     color: "#ff3b30",
     fontWeight: "600",
     fontSize: 16,

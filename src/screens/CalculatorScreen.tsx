@@ -10,14 +10,12 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { PriceMap, Session, SessionItem } from "../types";
 import CardItem from "../components/CardItem";
 import { formatNumber, parseFraction } from "../utils/helpers";
 import { CalculatorStackParamList } from "../../App";
-import ConfirmModal from "../components/ConfirmModal";
 
 type CalculatorScreenNavigationProp = StackNavigationProp<
   CalculatorStackParamList,
@@ -30,7 +28,6 @@ interface Props {
 
 const CalculatorScreen: React.FC<Props> = ({ prices }) => {
   const [quantities, setQuantities] = useState<Record<string, string>>({});
-  const [isModalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation<CalculatorScreenNavigationProp>();
 
   const handleChange = (network: string, denom: number, value: string) => {
@@ -55,8 +52,7 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
     return sum;
   }, 0);
 
-  const handleSaveSession = async () => {
-    setModalVisible(false);
+  const handlePreview = () => {
     const items: SessionItem[] = Object.keys(quantities)
       .map((key) => {
         const [network, denomStr] = key.split("-");
@@ -78,7 +74,7 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
       .filter((item): item is SessionItem => item !== null);
 
     if (items.length === 0) {
-      Alert.alert("Empty Items", "Please add quantities before saving.");
+      Alert.alert("Empty Items", "Please add quantities to preview.");
       return;
     }
 
@@ -89,43 +85,12 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
       overallTotal,
     };
 
-    try {
-      // 3. Get existing history and add the new session
-      const existingHistory = await AsyncStorage.getItem("sessionsHistory");
-      const history: Session[] = existingHistory
-        ? JSON.parse(existingHistory)
-        : [];
-      history.push(newSession);
-      await AsyncStorage.setItem("sessionsHistory", JSON.stringify(history));
-
-      // 4. Clear current quantities and navigate to receipt
-      setQuantities({});
-      navigation.navigate("Receipt", { session: newSession });
-    } catch (error) {
-      console.error("Failed to save session:", error);
-      Alert.alert("Error", "Could not save the session.");
-    }
-  };
-
-  const attemptToSave = () => {
-    // Check for items *before* showing the confirmation modal
-    const hasItems = Object.values(quantities).some(
-      (q) => q && parseFraction(q) > 0
-    );
-
-    if (!hasItems) {
-      Alert.alert("Empty Items", "Please add quantities before saving.");
-      return;
-    }
-
-    // If there are items, show the modal
-    setModalVisible(true);
+    navigation.navigate("Preview", { session: newSession });
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.topContainer}>
-        {/* MODIFIED HEADER */}
         <View style={styles.headerActions}>
           <TouchableOpacity
             onPress={() => setQuantities({})}
@@ -137,7 +102,7 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
             onPress={() => navigation.navigate("History")}
             style={styles.historyButton}
           >
-            <Text style={styles.historyButtonText}>History</Text>
+            <Text style={styles.historyButtonText}>Session History</Text>
           </TouchableOpacity>
         </View>
         <Text style={styles.totalText}>₦{formatNumber(overallTotal)}</Text>
@@ -148,7 +113,7 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
       >
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={{ paddingBottom: 150 }} // Increased padding
+          contentContainerStyle={{ paddingBottom: 150 }} 
           keyboardShouldPersistTaps="handled"
         >
           {Object.keys(prices).map((network) => (
@@ -174,23 +139,14 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
         </ScrollView>
       </KeyboardAvoidingView>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.saveButton} onPress={attemptToSave}>
-          <Text style={styles.saveButtonText}>Save Session</Text>
+        <TouchableOpacity style={styles.saveButton} onPress={handlePreview}>
+          <Text style={styles.saveButtonText}>Preview Purchase</Text>
         </TouchableOpacity>
       </View>
-
-      <ConfirmModal
-        visible={isModalVisible}
-        onClose={() => setModalVisible(false)}
-        onConfirm={handleSaveSession}
-        title="Confirm Save"
-        message="Are you sure you want to save this session? This action will clear the current entries."
-      />
     </SafeAreaView>
   );
 };
 
-// --- UPDATE STYLES ---
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#f9f9f9" },
   topContainer: {

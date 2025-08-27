@@ -1,30 +1,27 @@
-// App.tsx
 import "react-native-gesture-handler";
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack"; // Import StackNavigator
+import { createStackNavigator } from "@react-navigation/stack"; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import CalculatorScreen from "./src/screens/CalculatorScreen";
 import PricesScreen from "./src/screens/PricesScreen";
-
 import { defaultPrices } from "./src/constants";
 import { PriceMap, Session } from "./src/types";
 import HistoryScreen from "./src/screens/HistoryScreen";
 import ReceiptScreen from "./src/screens/ReceiptScreen";
+import PreviewScreen from "./src/screens/PreviewScreen";
 
-// Define Stack Navigator types
 export type CalculatorStackParamList = {
   Calculator: { prices: PriceMap };
   History: undefined;
   Receipt: { session: Session };
+  Preview: { session: Session }; 
 };
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator<CalculatorStackParamList>();
 
-// Create a new component for the Calculator Stack
 function CalculatorStack({ prices }: { prices: PriceMap }) {
   return (
     <Stack.Navigator>
@@ -40,6 +37,11 @@ function CalculatorStack({ prices }: { prices: PriceMap }) {
         name="Receipt"
         component={ReceiptScreen}
         options={{ title: "Session Receipt" }}
+      />
+      <Stack.Screen
+        name="Preview"
+        component={PreviewScreen}
+        options={{ title: "Preview" }}
       />
     </Stack.Navigator>
   );
