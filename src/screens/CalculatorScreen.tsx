@@ -148,7 +148,11 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#f9f9f9" },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
   topContainer: {
     flexDirection: "row",
     justifyContent: "space-between",

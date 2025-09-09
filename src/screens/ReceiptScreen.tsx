@@ -8,6 +8,7 @@ import {
   Alert,
   StyleSheet,
   View,
+  Platform,
 } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { captureRef } from "react-native-view-shot";
@@ -60,7 +61,11 @@ const ReceiptScreen: React.FC<Props> = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#fff" },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
   downloadButton: {
     backgroundColor: "#000",
     padding: 16,

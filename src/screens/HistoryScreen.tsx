@@ -7,6 +7,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
@@ -142,7 +143,11 @@ const HistoryScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#f9f9f9" },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   emptyText: { fontSize: 16, color: "#666" },
   listContainer: { padding: 16 },

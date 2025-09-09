@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 16,
     borderRadius: 8,
-    borderWidth: Platform.OS === "android" ? 0 : 1,
+    borderWidth: 1,
     borderColor: "#eee",
   },
   title: {

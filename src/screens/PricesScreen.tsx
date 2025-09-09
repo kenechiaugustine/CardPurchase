@@ -72,7 +72,11 @@ const PricesScreen: React.FC<Props> = ({ prices, setPrices }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#f9f9f9" },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
   scroll: { padding: 16 },
   section: { marginBottom: 20 },
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 8 },

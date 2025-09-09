@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import { RouteProp, useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -103,7 +104,11 @@ const PreviewScreen: React.FC<Props> = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#fff" },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingTop: Platform.OS === "android" ? 25 : 0,
+  },
   buttonContainer: {
     padding: 16,
     borderTopWidth: 1,
