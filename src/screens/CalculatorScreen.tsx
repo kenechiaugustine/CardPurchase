@@ -169,8 +169,8 @@ const styles = StyleSheet.create({
   totalText: { fontSize: 20, fontWeight: "700", textAlign: "right", flex: 1 },
   clearButton: {
     backgroundColor: "#eee",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 8,
   },
   clearButtonText: {
@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
   },
   historyButton: {
     backgroundColor: "#e0f7fa",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     borderRadius: 8,
     marginLeft: 10,
   },
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: "#000",
-    padding: 16,
+    padding: 12,
     borderRadius: 12,
     alignItems: "center",
   },

@@ -1,4 +1,3 @@
-// src/screens/ReceiptScreen.tsx
 import React, { useRef } from "react";
 import {
   ScrollView,
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
   },
   downloadButton: {
     backgroundColor: "#000",
-    padding: 16,
+    padding: 12,
     margin: 16,
     borderRadius: 12,
     alignItems: "center",

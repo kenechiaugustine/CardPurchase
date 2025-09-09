@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   downloadButton: {
     backgroundColor: "#f0f0f0",
-    padding: 16,
+    padding: 12,
     borderRadius: 12,
     alignItems: "center",
     marginBottom: 12,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     backgroundColor: "#000",
-    padding: 16,
+    padding: 12,
     borderRadius: 12,
     alignItems: "center",
   },
