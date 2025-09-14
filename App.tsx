@@ -53,11 +53,23 @@ export default function App() {
   const [prices, setPrices] = useState<PriceMap>(defaultPrices);
 
   useEffect(() => {
-    const load = async () => {
-      const stored = await AsyncStorage.getItem("prices");
-      if (stored) setPrices(JSON.parse(stored));
+    const loadAndMergePrices = async () => {
+      try {
+        const storedJson = await AsyncStorage.getItem("prices");
+        let finalPrices = { ...defaultPrices }; 
+        if (storedJson) {
+          const storedPrices = JSON.parse(storedJson) as Partial<PriceMap>;
+          finalPrices = { ...finalPrices, ...storedPrices };
+        }
+        setPrices(finalPrices);
+        await AsyncStorage.setItem("prices", JSON.stringify(finalPrices));
+      } catch (error) {
+        console.error("Failed to load or merge prices:", error);
+        setPrices(defaultPrices);
+      }
     };
-    load();
+
+    loadAndMergePrices();
   }, []);
 
   return (
