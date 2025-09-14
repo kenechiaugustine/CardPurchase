@@ -73,7 +73,7 @@ export default function App() {
           options={{
             headerShown: false,
             title: "Calculator",
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, size }: { color: string; size: number }) => (
               <CalculatorIcon color={color} size={size} />
             ),
           }}
@@ -84,7 +84,7 @@ export default function App() {
           name="PricesTab"
           options={{
             title: "Prices",
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, size }: { color: string; size: number }) => (
               <PricesIcon color={color} size={size} />
             ),
           }}
