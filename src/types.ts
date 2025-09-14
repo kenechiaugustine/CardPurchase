@@ -1,4 +1,4 @@
-export type Network = "MTN" | "Airtel" | "GLO";
+export type Network = "MTN" | "Airtel" | "GLO" | "9Mobile";
 
 export type PriceMap = {
   [network in Network]: {
