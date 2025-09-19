@@ -95,7 +95,7 @@ const PreviewScreen: React.FC<Props> = ({ route }) => {
           disabled={isSaved}
         >
           <Text style={styles.saveButtonText}>
-            {isSaved ? "Saved" : "Save For Later"}
+            {isSaved ? "Session Saved" : "Save For Later"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -110,17 +110,20 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
   buttonContainer: {
-    padding: 16,
+    padding: 6,
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
     borderTopWidth: 1,
-    borderColor: "#eee",
+    borderColor: "#f7f4f4ff",
     backgroundColor: "#fff",
   },
   downloadButton: {
     backgroundColor: "#f0f0f0",
+    flex: 1,
     padding: 12,
     borderRadius: 12,
     alignItems: "center",
-    marginBottom: 12,
   },
   downloadButtonText: {
     color: "#333",
@@ -130,6 +133,7 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: "#000",
     padding: 12,
+    flex: 1,
     borderRadius: 12,
     alignItems: "center",
   },

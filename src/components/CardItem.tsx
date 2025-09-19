@@ -23,7 +23,8 @@ const CardItem: React.FC<CardItemProps> = ({
         {network} {denomination}
       </Text>
       <TextInput
-        keyboardType="numeric"
+        keyboardType="number-pad"
+        returnKeyType="done"
         placeholder="Enter quantity"
         value={value}
         onChangeText={onChange}
