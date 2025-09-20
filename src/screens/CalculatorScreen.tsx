@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   KeyboardAvoidingView,
@@ -16,6 +15,7 @@ import { PriceMap, Session, SessionItem } from "../types";
 import CardItem from "../components/CardItem";
 import { formatNumber, parseFraction } from "../utils/helpers";
 import { CalculatorStackParamList } from "../../App";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type CalculatorScreenNavigationProp = StackNavigationProp<
   CalculatorStackParamList,
@@ -89,61 +89,62 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.topContainer}>
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            onPress={() => setQuantities({})}
-            style={styles.clearButton}
-          >
-            <Text style={styles.clearButtonText}>Clear</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("History")}
-            style={styles.historyButton}
-          >
-            <Text style={styles.historyButtonText}>Session History</Text>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
+          <View style={styles.topContainer}>
+            <View style={styles.headerActions}>
+              <TouchableOpacity
+                onPress={() => setQuantities({})}
+                style={styles.clearButton}
+              >
+                <Text style={styles.clearButtonText}>Clear</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("History")}
+                style={styles.historyButton}
+              >
+                <Text style={styles.historyButtonText}>Session History</Text>
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.totalText}>₦{formatNumber(overallTotal)}</Text>
+          </View>
+
+          <ScrollView style={styles.scroll}>
+            {Object.keys(prices).map((network) => (
+              <View key={network} style={styles.section}>
+                <Text style={styles.sectionTitle}>{network}</Text>
+                {Object.keys(prices[network as keyof PriceMap]).map((denom) => {
+                  const key = `${network}-${denom}`;
+                  return (
+                    <CardItem
+                      key={key}
+                      network={network}
+                      denomination={Number(denom)}
+                      value={quantities[key] || ""}
+                      onChange={(text) =>
+                        handleChange(network, Number(denom), text)
+                      }
+                      total={calcTotal(network, Number(denom))}
+                    />
+                  );
+                })}
+              </View>
+            ))}
+          </ScrollView>
+        </KeyboardAvoidingView>
+
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.saveButton} onPress={handlePreview}>
+            <Text style={styles.saveButtonText}>Preview Purchase</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.totalText}>₦{formatNumber(overallTotal)}</Text>
-      </View>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={{ paddingBottom: 90 }} 
-          keyboardShouldPersistTaps="handled"
-        >
-          {Object.keys(prices).map((network) => (
-            <View key={network} style={styles.section}>
-              <Text style={styles.sectionTitle}>{network}</Text>
-              {Object.keys(prices[network as keyof PriceMap]).map((denom) => {
-                const key = `${network}-${denom}`;
-                return (
-                  <CardItem
-                    key={key}
-                    network={network}
-                    denomination={Number(denom)}
-                    value={quantities[key] || ""}
-                    onChange={(text) =>
-                      handleChange(network, Number(denom), text)
-                    }
-                    total={calcTotal(network, Number(denom))}
-                  />
-                );
-              })}
-            </View>
-          ))}
-        </ScrollView>
-      </KeyboardAvoidingView>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.saveButton} onPress={handlePreview}>
-          <Text style={styles.saveButtonText}>Preview Purchase</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
@@ -192,10 +193,6 @@ const styles = StyleSheet.create({
   section: { marginBottom: 20 },
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 8 },
   footer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
     padding: 16,
     backgroundColor: "#fafafa",
     borderTopWidth: 1,

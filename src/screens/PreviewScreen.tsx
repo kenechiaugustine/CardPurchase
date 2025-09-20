@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -18,6 +17,7 @@ import * as MediaLibrary from "expo-media-library";
 import { CalculatorStackParamList } from "../../App";
 import { Session } from "../types";
 import ReceiptView from "../components/ReceiptView";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type PreviewScreenRouteProp = RouteProp<CalculatorStackParamList, "Preview">;
 type PreviewScreenNavigationProp = StackNavigationProp<
@@ -65,7 +65,7 @@ const PreviewScreen: React.FC<Props> = ({ route }) => {
       history.push(session);
       await AsyncStorage.setItem("sessionsHistory", JSON.stringify(history));
 
-      setIsSaved(true); 
+      setIsSaved(true);
       Alert.alert(
         "Session Saved",
         "Your session has been saved successfully.",
@@ -78,28 +78,30 @@ const PreviewScreen: React.FC<Props> = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
-        <ReceiptView session={session} ref={receiptRef} />
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.downloadButton}
-          onPress={handleDownload}
-        >
-          <Text style={styles.downloadButtonText}>Download As Image</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.saveButton, isSaved && styles.disabledButton]}
-          onPress={handleSaveSession}
-          disabled={isSaved}
-        >
-          <Text style={styles.saveButtonText}>
-            {isSaved ? "Session Saved" : "Save For Later"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView>
+          <ReceiptView session={session} ref={receiptRef} />
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.downloadButton}
+            onPress={handleDownload}
+          >
+            <Text style={styles.downloadButtonText}>Download As Image</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.saveButton, isSaved && styles.disabledButton]}
+            onPress={handleSaveSession}
+            disabled={isSaved}
+          >
+            <Text style={styles.saveButtonText}>
+              {isSaved ? "Session Saved" : "Save For Later"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

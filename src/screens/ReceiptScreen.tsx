@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import {
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   Text,
   Alert,
@@ -15,6 +14,7 @@ import * as MediaLibrary from "expo-media-library";
 
 import { CalculatorStackParamList } from "../../App";
 import ReceiptView from "../components/ReceiptView";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type ReceiptScreenRouteProp = RouteProp<CalculatorStackParamList, "Receipt">;
 
@@ -24,7 +24,7 @@ interface Props {
 
 const ReceiptScreen: React.FC<Props> = ({ route }) => {
   const { session } = route.params;
-  const receiptRef = useRef<View>(null); 
+  const receiptRef = useRef<View>(null);
 
   const handleDownload = async () => {
     const { status } = await MediaLibrary.requestPermissionsAsync();
@@ -48,14 +48,19 @@ const ReceiptScreen: React.FC<Props> = ({ route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
-        <ReceiptView session={session} ref={receiptRef} />
-      </ScrollView>
-      <TouchableOpacity style={styles.downloadButton} onPress={handleDownload}>
-        <Text style={styles.downloadButtonText}>Download As Image</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <ScrollView>
+          <ReceiptView session={session} ref={receiptRef} />
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.downloadButton}
+          onPress={handleDownload}
+        >
+          <Text style={styles.downloadButtonText}>Download As Image</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

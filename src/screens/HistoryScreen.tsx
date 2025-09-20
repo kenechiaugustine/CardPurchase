@@ -5,7 +5,6 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
   Platform,
 } from "react-native";
@@ -17,6 +16,7 @@ import { CalculatorStackParamList } from "../../App";
 import { formatNumber } from "../utils/helpers";
 import { Swipeable } from "react-native-gesture-handler";
 import ConfirmModal from "../components/ConfirmModal";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 type HistoryScreenNavigationProp = StackNavigationProp<
   CalculatorStackParamList,
@@ -104,41 +104,45 @@ const HistoryScreen: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <FlatList
-        data={sessions}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-            <TouchableOpacity
-              style={styles.sessionItem}
-              onPress={() => navigation.navigate("Receipt", { session: item })}
-            >
-              <View>
-                <Text style={styles.sessionDate}>
-                  {new Date(item.date).toLocaleString()}
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.safeArea}>
+        <FlatList
+          data={sessions}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+              <TouchableOpacity
+                style={styles.sessionItem}
+                onPress={() =>
+                  navigation.navigate("Receipt", { session: item })
+                }
+              >
+                <View>
+                  <Text style={styles.sessionDate}>
+                    {new Date(item.date).toLocaleString()}
+                  </Text>
+                  <Text style={styles.sessionInfo}>
+                    {item.items.length} item(s)
+                  </Text>
+                </View>
+                <Text style={styles.sessionTotal}>
+                  ₦{formatNumber(item.overallTotal)}
                 </Text>
-                <Text style={styles.sessionInfo}>
-                  {item.items.length} item(s)
-                </Text>
-              </View>
-              <Text style={styles.sessionTotal}>
-                ₦{formatNumber(item.overallTotal)}
-              </Text>
-            </TouchableOpacity>
-          </Swipeable>
-        )}
-        contentContainerStyle={styles.listContainer}
-      />
+              </TouchableOpacity>
+            </Swipeable>
+          )}
+          contentContainerStyle={styles.listContainer}
+        />
 
-      <ConfirmModal
-        visible={isDeleteModalVisible}
-        title="Confirm Deletion"
-        message="Are you sure you want to permanently delete this session?"
-        onClose={() => setDeleteModalVisible(false)}
-        onConfirm={handleConfirmDelete}
-      />
-    </SafeAreaView>
+        <ConfirmModal
+          visible={isDeleteModalVisible}
+          title="Confirm Deletion"
+          message="Are you sure you want to permanently delete this session?"
+          onClose={() => setDeleteModalVisible(false)}
+          onConfirm={handleConfirmDelete}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

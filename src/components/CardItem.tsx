@@ -24,7 +24,6 @@ const CardItem: React.FC<CardItemProps> = ({
       </Text>
       <TextInput
         keyboardType="number-pad"
-        returnKeyType="done"
         placeholder="Enter quantity"
         value={value}
         onChangeText={onChange}
@@ -66,6 +65,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   total: {
+    textAlign: "right",
     fontSize: 16,
     fontWeight: "700",
   },
