@@ -2516,10 +2516,10 @@ expo-keep-awake@~15.0.7:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-15.0.7.tgz#4eada556e1cca6c9c2e5aa39478fd01816cd0bc9"
   integrity sha512-CgBNcWVPnrIVII5G54QDqoE125l+zmqR4HR8q+MQaCfHet+dYpS5vX5zii/RMayzGN4jPgA4XYIQ28ePKFjHoA==
 
-expo-media-library@~18.1.1:
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-18.1.1.tgz#90a6024aa69a1f51eabaf4f9fbe2a45401fed591"
-  integrity sha512-AuCEawt/bCrYXwXZiHhj5wI/eHMqrYosONz5FStLEF1OvCvTQmFFjOpIXwJ8ClwWOiyx5dKruR/DrSezt/C1YQ==
+expo-media-library@~18.2.0:
+  version "18.2.0"
+  resolved "https://registry.yarnpkg.com/expo-media-library/-/expo-media-library-18.2.0.tgz#b7515e25df5951e6b579b2ca1bee934ed206fa43"
+  integrity sha512-aIYLIqmU8LFWrQcfZdwg9f/iWm0wC8uhZ7HiUiTnrigtxf417cVvNokX9afXpIOKBHAHRjVIbcs1nN8KZDE2Fw==
 
 expo-modules-autolinking@3.0.10:
   version "3.0.10"
