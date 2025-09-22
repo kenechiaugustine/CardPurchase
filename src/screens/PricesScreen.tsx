@@ -44,8 +44,7 @@ const PricesScreen: React.FC<Props> = ({ prices, setPrices }) => {
         >
           <ScrollView
             style={styles.scroll}
-            contentContainerStyle={{ paddingBottom: 90 }}
-            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ paddingBottom: 70 }}
           >
             {Object.keys(prices).map((network) => (
               <View key={network} style={styles.section}>
@@ -54,7 +53,7 @@ const PricesScreen: React.FC<Props> = ({ prices, setPrices }) => {
                   <View key={`${network}-${denom}`} style={styles.row}>
                     <Text style={styles.label}>{denom}</Text>
                     <TextInput
-                      keyboardType="numeric"
+                      keyboardType="number-pad"
                       value={String(
                         prices[network as keyof PriceMap][Number(denom)]
                       )}
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     paddingTop: Platform.OS === "android" ? 25 : 0,
   },
-  scroll: { padding: 16 },
+  scroll: { padding: 16, flex: 1 },
   section: { marginBottom: 20 },
   sectionTitle: { fontSize: 18, fontWeight: "700", marginBottom: 8 },
   row: {
