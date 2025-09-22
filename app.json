@@ -5,20 +5,21 @@
     "version": "1.0.0",
     "sdkVersion": "54.0.0",
     "orientation": "portrait",
-    "icon": "./assets/card-buy-icon.svg",
+    "icon": "./assets/card-purchase-icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-card-buy-icon.svg",
+      "image": "./assets/card-purchase-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.karionye.CardPurchase"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/splash-card-buy-icon.svg",
+        "foregroundImage": "./assets/card-purchase-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
