@@ -56,7 +56,7 @@ export default function App() {
     const loadAndMergePrices = async () => {
       try {
         const storedJson = await AsyncStorage.getItem("prices");
-        let finalPrices = { ...defaultPrices }; 
+        let finalPrices = { ...defaultPrices };
         if (storedJson) {
           const storedPrices = JSON.parse(storedJson) as Partial<PriceMap>;
           finalPrices = { ...finalPrices, ...storedPrices };
