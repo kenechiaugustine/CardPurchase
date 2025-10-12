@@ -16,6 +16,7 @@ import CardItem from "../components/CardItem";
 import { formatNumber, parseFraction } from "../utils/helpers";
 import { CalculatorStackParamList } from "../../App";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { defaultPrices } from "../constants";
 
 type CalculatorScreenNavigationProp = StackNavigationProp<
   CalculatorStackParamList,
@@ -118,21 +119,22 @@ const CalculatorScreen: React.FC<Props> = ({ prices }) => {
             {Object.keys(prices).map((network) => (
               <View key={network} style={styles.section}>
                 <Text style={styles.sectionTitle}>{network}</Text>
-                {Object.keys(prices[network as keyof PriceMap]).map((denom) => {
-                  const key = `${network}-${denom}`;
-                  return (
-                    <CardItem
-                      key={key}
-                      network={network}
-                      denomination={Number(denom)}
-                      value={quantities[key] || ""}
-                      onChange={(text) =>
-                        handleChange(network, Number(denom), text)
-                      }
-                      total={calcTotal(network, Number(denom))}
-                    />
-                  );
-                })}
+                {Object.keys(prices[network as keyof PriceMap])
+                  .map(Number)
+                  .sort((a, b) => b - a)
+                  .map((denom) => {
+                    const key = `${network}-${denom}`;
+                    return (
+                      <CardItem
+                        key={key}
+                        network={network}
+                        denomination={denom}
+                        value={quantities[key] || ""}
+                        onChange={(text) => handleChange(network, denom, text)}
+                        total={calcTotal(network, denom)}
+                      />
+                    );
+                  })}
               </View>
             ))}
           </ScrollView>
