@@ -63,6 +63,7 @@ export default function App() {
         }
         setPrices(finalPrices);
         await AsyncStorage.setItem("prices", JSON.stringify(finalPrices));
+        // console.log("Final prices: ",JSON.stringify(finalPrices))
       } catch (error) {
         console.error("Failed to load or merge prices:", error);
         setPrices(defaultPrices);
