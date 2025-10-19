@@ -10,7 +10,7 @@
     "prebuild": "npx expo prebuild --clean",
     "clean": "cd android && ./gradlew clean && cd ..",
     "release": "cd android && ./gradlew assembleRelease && cd ..",
-    "move:apk": "cp android/app/build/outputs/apk/release/app-release.apk ~/Desktop/",
+    "cp:apk": "cp android/app/build/outputs/apk/release/app-release.apk ~/Desktop/",
     "build:apk": "npm run clean && npm run release"
   },
   "dependencies": {
